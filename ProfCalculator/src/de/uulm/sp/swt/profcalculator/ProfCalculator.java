@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
+public class ProfCalculator	extends Application implements EventHandler<ActionEvent>, Observer {
 
 	private Expression expression = new CounterValue(this);
 	
@@ -80,6 +80,11 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 
 	public static void main(String[] args) {
 		launch(args);
+	}
+
+	@Override
+	public void update() {
+		updateGUI();
 	}
 
 }
