@@ -1,6 +1,7 @@
 package de.uulm.sp.swt.profcalculator;
 
 import de.uulm.sp.swt.profcalculator.expressions.Addition;
+import de.uulm.sp.swt.profcalculator.expressions.Evaluate;
 import de.uulm.sp.swt.profcalculator.expressions.Expression;
 import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
 import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
@@ -13,12 +14,16 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
+	
+	private Mode mode = Mode.BRACKET;
 
 	private final static Value DEFAULT_VALUE = new Value(0);
 
@@ -31,6 +36,9 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	private Button additionButton = new Button("+");
 	private Button multiplicationButton = new Button("*");
 	private Button subtractionButton = new Button("-");
+	
+	private RadioButton rbBracket = new RadioButton("Brackets");
+	private RadioButton rbEvaluation = new RadioButton("Immediate Evaluation");
 
 	private Label resultLabel = new Label();
 
@@ -38,8 +46,27 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Professorial Calculator");
 		errorLabel.setTextFill(Color.web("#AA0000"));
+		
+		ToggleGroup modus = new ToggleGroup();
+		rbBracket.setToggleGroup(modus);
+		rbBracket.setSelected(true);
+		rbEvaluation.setToggleGroup(modus);
+		
+		rbBracket.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				mode = Mode.BRACKET;
+			}
+		});
+		
+		rbEvaluation.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				mode = Mode.EVALUATE;
+			}
+		});
 
-		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subtractionButton, multiplicationButton, resultLabel);
+		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subtractionButton, multiplicationButton, resultLabel, rbBracket, rbEvaluation);
 		layout.setPadding(new Insets(20, 80, 20, 80));
 		Scene scene = new Scene(layout);
 
@@ -64,13 +91,21 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 			else if (event.getSource() == subtractionButton) {
 				expression = new Subtraction(expression, new Value(newValue));
 			}
-			expression = new NecessaryBrackets(expression);
+			if(mode == Mode.BRACKET) {
+				expression = new NecessaryBrackets(expression);
+			}
+			else {
+				expression = new Evaluate(expression);
+			}
 			updateGUI();
 			inputField.requestFocus();
 		} catch (NumberFormatException e) {
 			errorLabel.setText("\"" + inputField.getText() + "\" is not a valid integer");
 		}
 	}
+	
+	
+	
 
 	private void updateGUI() {
 		resultLabel.setText(expression.computeEquation());
