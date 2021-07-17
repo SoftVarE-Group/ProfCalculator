@@ -2,6 +2,7 @@ package de.uulm.sp.swt.profcalculator.gui;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 
 public class LargeFontGUIFactory implements GUIFactory {
@@ -20,6 +21,13 @@ public class LargeFontGUIFactory implements GUIFactory {
 		Button button = new Button(title);
 		button.setFont(FONT);
 		return button;
+	}
+
+	@Override
+	public TextField createTextField() {
+		TextField tf = new TextField();
+		tf.setFont(FONT);
+		return tf;
 	}
 
 }

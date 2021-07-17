@@ -2,6 +2,7 @@ package de.uulm.sp.swt.profcalculator.gui;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -21,6 +22,13 @@ public class BlueFontGUIFactory implements GUIFactory {
 		Button button = new Button(title);
 		button.setTextFill(BLUE);
 		return button;
+	}
+
+	@Override
+	public TextField createTextField() {
+		TextField tf = new TextField();
+		tf.setStyle("-fx-text-inner-color: blue;");
+		return tf;
 	}
 
 }

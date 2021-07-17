@@ -7,6 +7,7 @@ import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
 import de.uulm.sp.swt.profcalculator.expressions.Value;
 import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
 import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
+import de.uulm.sp.swt.profcalculator.gui.LargeFontGUIFactory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,11 +26,11 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 
 	private Expression expression = DEFAULT_VALUE;
 	
-	private GUIFactory guiFactory = new BlueFontGUIFactory();
+	private GUIFactory guiFactory = new LargeFontGUIFactory();
 
 	private Label errorLabel = guiFactory.createLabel();
 
-	private TextField inputField = new TextField();
+	private TextField inputField = guiFactory.createTextField();
 
 	private Button additionButton = guiFactory.createButton("+");
 	private Button multiplicationButton = guiFactory.createButton("*");
