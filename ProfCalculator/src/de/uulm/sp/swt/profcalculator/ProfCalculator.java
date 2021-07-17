@@ -8,6 +8,7 @@ import de.uulm.sp.swt.profcalculator.expressions.Value;
 import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
 import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
 import de.uulm.sp.swt.profcalculator.gui.LargeFontGUIFactory;
+import de.uulm.sp.swt.profcalculator.gui.LargeRedFontGUIFactory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,7 +27,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 
 	private Expression expression = DEFAULT_VALUE;
 	
-	private GUIFactory guiFactory = new LargeFontGUIFactory();
+	private GUIFactory guiFactory = new LargeRedFontGUIFactory();
 
 	private Label errorLabel = guiFactory.createLabel();
 
