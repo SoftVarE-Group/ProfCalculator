@@ -1,5 +1,12 @@
 package de.uulm.sp.swt.profcalculator;
 
+import de.uulm.sp.swt.profcalculator.expressions.Addition;
+import de.uulm.sp.swt.profcalculator.expressions.Evaluate;
+import de.uulm.sp.swt.profcalculator.expressions.Expression;
+import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
+import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
+import de.uulm.sp.swt.profcalculator.expressions.Subtraction;
+import de.uulm.sp.swt.profcalculator.expressions.Value;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -7,22 +14,31 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
+	
+	private Mode mode = Mode.BRACKET;
 
 	private final static Value DEFAULT_VALUE = new Value(0);
 
-	private Add addition = new Add(DEFAULT_VALUE, DEFAULT_VALUE);
+	private Expression expression = DEFAULT_VALUE;
 
 	private Label errorLabel = new Label();
 
 	private TextField inputField = new TextField();
 
-	private Button addButton = new Button("+");
+	private Button additionButton = new Button("+");
+	private Button multiplicationButton = new Button("*");
+	private Button subtractionButton = new Button("-");
+	
+	private RadioButton rbBracket = new RadioButton("Brackets");
+	private RadioButton rbEvaluation = new RadioButton("Immediate Evaluation");
 
 	private Label resultLabel = new Label();
 
@@ -30,14 +46,35 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Professorial Calculator");
 		errorLabel.setTextFill(Color.web("#AA0000"));
+		
+		ToggleGroup modus = new ToggleGroup();
+		rbBracket.setToggleGroup(modus);
+		rbBracket.setSelected(true);
+		rbEvaluation.setToggleGroup(modus);
+		
+		rbBracket.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				mode = Mode.BRACKET;
+			}
+		});
+		
+		rbEvaluation.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent e) {
+				mode = Mode.EVALUATE;
+			}
+		});
 
-		VBox layout = new VBox(10, errorLabel, inputField, addButton, resultLabel);
+		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subtractionButton, multiplicationButton, resultLabel, rbBracket, rbEvaluation);
 		layout.setPadding(new Insets(20, 80, 20, 80));
 		Scene scene = new Scene(layout);
 
 		stage.setScene(scene);
 		stage.show();
-		addButton.setOnAction(this);
+		additionButton.setOnAction(this);
+		multiplicationButton.setOnAction(this);
+		subtractionButton.setOnAction(this);
 		updateGUI();
 	}
 
@@ -45,17 +82,33 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	public void handle(ActionEvent event) {
 		try {
 			int newValue = Integer.parseInt(inputField.getText());
-			int oldResult = addition.evaluate();
-			addition = new Add(new Value(oldResult), new Value(newValue));
+			if (event.getSource() == additionButton) {
+				expression = new Addition(expression, new Value(newValue));
+			}
+			else if (event.getSource() == multiplicationButton) {
+				expression = new Multiplication(expression, new Value(newValue));
+			}
+			else if (event.getSource() == subtractionButton) {
+				expression = new Subtraction(expression, new Value(newValue));
+			}
+			if(mode == Mode.BRACKET) {
+				expression = new NecessaryBrackets(expression);
+			}
+			else {
+				expression = new Evaluate(expression);
+			}
 			updateGUI();
 			inputField.requestFocus();
 		} catch (NumberFormatException e) {
 			errorLabel.setText("\"" + inputField.getText() + "\" is not a valid integer");
 		}
 	}
+	
+	
+	
 
 	private void updateGUI() {
-		resultLabel.setText(addition.computeEquation());
+		resultLabel.setText(expression.computeEquation());
 		inputField.setText("");
 		errorLabel.setText("");
 	}
