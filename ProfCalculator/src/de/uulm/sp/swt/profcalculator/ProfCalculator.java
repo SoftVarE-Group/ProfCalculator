@@ -7,8 +7,7 @@ import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
 import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
 import de.uulm.sp.swt.profcalculator.expressions.Sub;
 import de.uulm.sp.swt.profcalculator.expressions.Value;
-import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
-import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
+import de.uulm.sp.swt.profcalculator.gui.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -27,16 +26,16 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 
 	private Expression expression = DEFAULT_VALUE;
 	
-	private GUIFactory guiFactory = new BlueFontGUIFactory();
+	private GUIFactory guiFactory = new TerminalStyleFactory();
 
 	private Label errorLabel = guiFactory.createLabel();
 
-	private TextField inputField = new TextField();
+	private TextField inputField = guiFactory.createTextField();
 
 	private Button additionButton = guiFactory.createButton("+");
-	private Button subtractionButton = new Button("-");
+	private Button subtractionButton = guiFactory.createButton("-");
 	private Button multiplicationButton = guiFactory.createButton("*");
-	private Button divisionButton = new Button("/");
+	private Button divisionButton = guiFactory.createButton("/");
 
 	private Label resultLabel = guiFactory.createLabel();
 
@@ -47,6 +46,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 
 		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subtractionButton, multiplicationButton, divisionButton, resultLabel);
 		layout.setPadding(new Insets(20, 80, 20, 80));
+		layout.setStyle(guiFactory.getBackgroundColorStyle());
 		Scene scene = new Scene(layout);
 
 		stage.setScene(scene);
