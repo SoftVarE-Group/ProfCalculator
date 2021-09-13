@@ -7,6 +7,8 @@ import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
 import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
 import de.uulm.sp.swt.profcalculator.expressions.Sub;
 import de.uulm.sp.swt.profcalculator.expressions.Value;
+import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
+import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,17 +26,19 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	private final static Value DEFAULT_VALUE = new Value(0);
 
 	private Expression expression = DEFAULT_VALUE;
+	
+	private GUIFactory guiFactory = new BlueFontGUIFactory();
 
-	private Label errorLabel = new Label();
+	private Label errorLabel = guiFactory.createLabel();
 
 	private TextField inputField = new TextField();
 
-	private Button additionButton = new Button("+");
+	private Button additionButton = guiFactory.createButton("+");
 	private Button subtractionButton = new Button("-");
-	private Button multiplicationButton = new Button("*");
+	private Button multiplicationButton = guiFactory.createButton("*");
 	private Button divisionButton = new Button("/");
 
-	private Label resultLabel = new Label();
+	private Label resultLabel = guiFactory.createLabel();
 
 	@Override
 	public void start(Stage stage) throws Exception {
@@ -61,10 +65,12 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 			double newValue = Double.parseDouble(inputField.getText());
 			if (event.getSource() == additionButton) {
 				expression = new Addition(expression, new Value(newValue));
+				Logger.getLogger().log("+ " + newValue);
 			} else if (event.getSource() == subtractionButton) {
 				expression = new Sub(expression, new Value(newValue));
 			} else if (event.getSource() == multiplicationButton) {
 				expression = new Multiplication(expression, new Value(newValue));
+				Logger.getLogger().log("* " + newValue);
 			} else if (event.getSource() == divisionButton) {
 				expression = new Div(expression, new Value(newValue));
 			}
