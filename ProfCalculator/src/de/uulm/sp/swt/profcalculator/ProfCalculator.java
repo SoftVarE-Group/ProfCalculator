@@ -2,6 +2,7 @@ package de.uulm.sp.swt.profcalculator;
 
 import de.uulm.sp.swt.profcalculator.expressions.Addition;
 import de.uulm.sp.swt.profcalculator.expressions.Div;
+import de.uulm.sp.swt.profcalculator.expressions.CounterValue;
 import de.uulm.sp.swt.profcalculator.expressions.Expression;
 import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
 import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
@@ -22,9 +23,7 @@ import javafx.stage.Stage;
 
 public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
 
-	private final static Value DEFAULT_VALUE = new Value(0);
-
-	private Expression expression = DEFAULT_VALUE;
+	private Expression expression = new CounterValue(this);
 	
 	private GUIFactory guiFactory = new TerminalStyleFactory();
 
@@ -84,7 +83,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 		}
 	}
 
-	private void updateGUI() {
+	public void updateGUI() {
 		resultLabel.setText(expression.computeEquation());
 		inputField.setText("");
 		errorLabel.setText("");
