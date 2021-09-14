@@ -69,18 +69,19 @@ public class ProfCalculator extends Observer implements EventHandler<ActionEvent
 	public void handle(ActionEvent event) {
 		try {
 			double newValue = Double.parseDouble(inputField.getText());
+			Button pressedButton = (Button) event.getSource();
 
-			if (event.getSource() == additionButton) {
+			if (pressedButton == additionButton) {
 				expression = new Addition(expression, new Value(newValue));
-				Logger.getLogger().log("+ " + newValue);
-			} else if (event.getSource() == subtractionButton) {
+			} else if (pressedButton == subtractionButton) {
 				expression = new Sub(expression, new Value(newValue));
-			} else if (event.getSource() == multiplicationButton) {
+			} else if (pressedButton == multiplicationButton) {
 				expression = new Multiplication(expression, new Value(newValue));
-				Logger.getLogger().log("* " + newValue);
-			} else if (event.getSource() == divisionButton) {
+			} else if (pressedButton == divisionButton) {
 				expression = new Div(expression, new Value(newValue));
 			}
+			
+			Logger.getLogger().log(pressedButton.getText() + " " + newValue);
 			expression = new NecessaryBrackets(expression);
 			updateGUI();
 			inputField.requestFocus();
