@@ -6,9 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 
 public class LargeFontGUIFactory implements GUIFactory {
-	
+
 	final static Font FONT = new Font("Arial", 24);
-	
+
 	@Override
 	public Label createLabel() {
 		Label label = new Label();
@@ -32,7 +32,7 @@ public class LargeFontGUIFactory implements GUIFactory {
 
 	@Override
 	public String getBackgroundColorStyle() {
-		//this way the default values are used
+		// this way the default values are used
 		return null;
 	}
 

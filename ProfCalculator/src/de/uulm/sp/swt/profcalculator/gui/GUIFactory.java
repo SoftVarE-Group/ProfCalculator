@@ -11,7 +11,7 @@ public interface GUIFactory {
 	Button createButton(String title);
 
 	TextField createTextField();
-	
+
 	String getBackgroundColorStyle();
 
 }

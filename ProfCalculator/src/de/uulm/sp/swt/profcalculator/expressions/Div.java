@@ -19,5 +19,5 @@ public class Div extends Expression {
 			throw new ArithmeticException("Division by zero is not allowed!");
 		return left.evaluate() / right.evaluate();
 	}
-	
+
 }

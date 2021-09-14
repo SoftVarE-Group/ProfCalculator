@@ -6,11 +6,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
 public class BlueFontGUIFactory implements GUIFactory {
-	
+
 	final static Color BLUE = Color.web("#0000AA");
-	
+
 	public final static String BLUE_HEX_CODE = "#0000aa";
-	
+
 	@Override
 	public Label createLabel() {
 		Label label = new Label();
@@ -34,7 +34,7 @@ public class BlueFontGUIFactory implements GUIFactory {
 
 	@Override
 	public String getBackgroundColorStyle() {
-		//this way the default values are used
+		// this way the default values are used
 		return null;
 	}
 

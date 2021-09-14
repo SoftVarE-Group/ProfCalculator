@@ -1,7 +1,7 @@
 package de.uulm.sp.swt.profcalculator.expressions;
 
 public class Addition extends Expression {
-	
+
 	public Expression left;
 	public Expression right;
 
@@ -17,5 +17,5 @@ public class Addition extends Expression {
 	public double evaluate() {
 		return left.evaluate() + right.evaluate();
 	}
-	
+
 }

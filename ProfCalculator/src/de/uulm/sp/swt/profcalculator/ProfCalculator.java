@@ -9,7 +9,7 @@ import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
 import de.uulm.sp.swt.profcalculator.expressions.Sub;
 import de.uulm.sp.swt.profcalculator.expressions.Value;
 import de.uulm.sp.swt.profcalculator.gui.*;
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,10 +21,12 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
+public class ProfCalculator extends Observer implements EventHandler<ActionEvent> {
 
-	private Expression expression = new CounterValue(this);
-	
+	private CounterValue subject = new CounterValue();
+
+	private Expression expression = subject;
+
 	private GUIFactory guiFactory = new TerminalStyleFactory();
 
 	private Label errorLabel = guiFactory.createLabel();
@@ -38,12 +40,17 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 
 	private Label resultLabel = guiFactory.createLabel();
 
+	public ProfCalculator() {
+		subject.addObserver(this);
+	}
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Professorial Calculator");
 		errorLabel.setTextFill(Color.web("#AA0000"));
 
-		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subtractionButton, multiplicationButton, divisionButton, resultLabel);
+		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subtractionButton, multiplicationButton,
+				divisionButton, resultLabel);
 		layout.setPadding(new Insets(20, 80, 20, 80));
 		layout.setStyle(guiFactory.getBackgroundColorStyle());
 		Scene scene = new Scene(layout);
@@ -54,7 +61,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 		subtractionButton.setOnAction(this);
 		multiplicationButton.setOnAction(this);
 		divisionButton.setOnAction(this);
-		
+
 		updateGUI();
 	}
 
@@ -62,6 +69,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	public void handle(ActionEvent event) {
 		try {
 			double newValue = Double.parseDouble(inputField.getText());
+
 			if (event.getSource() == additionButton) {
 				expression = new Addition(expression, new Value(newValue));
 				Logger.getLogger().log("+ " + newValue);
@@ -78,7 +86,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 			inputField.requestFocus();
 		} catch (NumberFormatException e) {
 			errorLabel.setText("\"" + inputField.getText() + "\" is not a valid integer");
-		}catch (ArithmeticException e) {
+		} catch (ArithmeticException e) {
 			errorLabel.setText(e.getMessage());
 		}
 	}
@@ -93,4 +101,17 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 		launch(args);
 	}
 
+	@Override
+	public void update() {
+		expression = new Value(subject.getState());
+
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				updateGUI();
+
+			}
+		});
+
+	}
 }

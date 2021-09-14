@@ -2,7 +2,7 @@ package de.uulm.sp.swt.profcalculator.expressions;
 
 public class Value extends Expression {
 
-	Double value;
+	protected Double value;
 
 	public Value(double value) {
 		this.value = value;
