@@ -7,11 +7,11 @@ public class NecessaryBrackets extends Expression {
 	public NecessaryBrackets(Expression expression) {
 		this.expression = expression;
 	}
-	
+
 	@Override
 	public String toString(Expression parent) {
 		String childString = expression.toString(parent);
-		if (expression instanceof Multiplication && parent instanceof Addition) {
+		if (parent instanceof Multiplication && expression instanceof Addition) {
 			childString = "(" + childString + ")";
 		}
 		return childString;
