@@ -1,5 +1,13 @@
 package de.uulm.sp.swt.profcalculator;
 
+import de.uulm.sp.swt.profcalculator.expressions.Addition;
+import de.uulm.sp.swt.profcalculator.expressions.CounterValue;
+import de.uulm.sp.swt.profcalculator.expressions.Expression;
+import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
+import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
+import de.uulm.sp.swt.profcalculator.expressions.Value;
+import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
+import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,32 +20,35 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
+public class ProfCalculator extends Application implements EventHandler<ActionEvent> {
 
-	private final static Value DEFAULT_VALUE = new Value(0);
+	private Expression expression = new CounterValue(this);
 
-	private Add addition = new Add(DEFAULT_VALUE, DEFAULT_VALUE);
+	private GUIFactory guiFactory = new BlueFontGUIFactory();
 
-	private Label errorLabel = new Label();
+	private Label errorLabel = guiFactory.createLabel();
 
 	private TextField inputField = new TextField();
 
-	private Button addButton = new Button("+");
+	private Button additionButton = guiFactory.createButton("+");
+	private Button subButton = guiFactory.createButton("-");
+	private Button multiplicationButton = guiFactory.createButton("*");
 
-	private Label resultLabel = new Label();
+	private Label resultLabel = guiFactory.createLabel();
 
 	@Override
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Professorial Calculator");
 		errorLabel.setTextFill(Color.web("#AA0000"));
 
-		VBox layout = new VBox(10, errorLabel, inputField, addButton, resultLabel);
+		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subButton, multiplicationButton, resultLabel);
 		layout.setPadding(new Insets(20, 80, 20, 80));
 		Scene scene = new Scene(layout);
 
 		stage.setScene(scene);
 		stage.show();
-		addButton.setOnAction(this);
+		additionButton.setOnAction(this);
+		multiplicationButton.setOnAction(this);
 		updateGUI();
 	}
 
@@ -45,8 +56,17 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	public void handle(ActionEvent event) {
 		try {
 			int newValue = Integer.parseInt(inputField.getText());
-			int oldResult = addition.evaluate();
-			addition = new Add(new Value(oldResult), new Value(newValue));
+			if (event.getSource() == additionButton) {
+				expression = new Addition(expression, new Value(newValue));
+				Logger.getLogger().log("+ " + newValue);
+			} else if (event.getSource() == subButton) {
+				expression = new Multiplication(expression, new Value(newValue));
+				Logger.getLogger().log("- " + newValue);
+			} else if (event.getSource() == multiplicationButton) {
+				expression = new Multiplication(expression, new Value(newValue));
+				Logger.getLogger().log("* " + newValue);
+			}
+			expression = new NecessaryBrackets(expression);
 			updateGUI();
 			inputField.requestFocus();
 		} catch (NumberFormatException e) {
@@ -54,8 +74,8 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 		}
 	}
 
-	private void updateGUI() {
-		resultLabel.setText(addition.computeEquation());
+	public void updateGUI() {
+		resultLabel.setText(expression.computeEquation());
 		inputField.setText("");
 		errorLabel.setText("");
 	}
