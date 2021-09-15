@@ -22,6 +22,7 @@ class TNecessaryBracketsBlackBox {
 	void testNoBrackets() {
 		assertEquals("1 + 1 * 1", new Addition(value, mult).toString());
 		assertEquals("1 - 1 * 1", new Sub(value, mult).toString());
+		assertEquals("1 - 1 + 1", new Sub(value, add).toString());
 	}
 	
 	@Test
