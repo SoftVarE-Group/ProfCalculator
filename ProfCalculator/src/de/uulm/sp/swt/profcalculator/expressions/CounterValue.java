@@ -1,16 +1,19 @@
 package de.uulm.sp.swt.profcalculator.expressions;
 
-import de.uulm.sp.swt.profcalculator.ProfCalculator;
-import javafx.application.Platform;
+import de.uulm.sp.swt.profcalculator.Logger;
+import de.uulm.sp.swt.profcalculator.Observable;
 
-public class CounterValue extends Value implements Runnable {
-	
-	private ProfCalculator calc;
+//subject
+public class CounterValue extends Observable implements Runnable {
 
-	public CounterValue(ProfCalculator calc) {
+	public CounterValue() {
 		super(0);
-		this.calc = calc;
+
 		new Thread(this).start();
+	}
+
+	public double getState() {
+		return value;
 	}
 
 	@Override
@@ -21,12 +24,9 @@ public class CounterValue extends Value implements Runnable {
 			} catch (InterruptedException e) {
 			}
 			value++;
-			Platform.runLater(new Runnable() {
-				@Override
-				public void run() {
-					calc.updateGUI();
-				}
-			});
+			Logger.getLogger().log("Value increased: " + value);
+			setChanged();
+			notifyObservers();
 		}
 	}
 
