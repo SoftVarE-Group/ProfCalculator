@@ -2,7 +2,7 @@ package de.uulm.sp.swt.profcalculator.expressions;
 
 public abstract class Expression {
 
-	public abstract int evaluate();
+	public abstract double evaluate();
 
 	public abstract String toString(Expression parent);
 
