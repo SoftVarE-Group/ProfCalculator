@@ -2,9 +2,9 @@ package de.uulm.sp.swt.profcalculator.expressions;
 
 public class Value extends Expression {
 
-	Integer value;
+	Double value;
 
-	public Value(int value) {
+	public Value(double value) {
 		this.value = value;
 	}
 
@@ -13,8 +13,8 @@ public class Value extends Expression {
 	}
 
 	@Override
-	public int evaluate() {
-		return value.intValue();
+	public double evaluate() {
+		return value;
 	}
 
 }
