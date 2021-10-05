@@ -5,6 +5,7 @@ import de.uulm.sp.swt.profcalculator.expressions.CounterValue;
 import de.uulm.sp.swt.profcalculator.expressions.Expression;
 import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
 import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
+import de.uulm.sp.swt.profcalculator.expressions.Sub;
 import de.uulm.sp.swt.profcalculator.expressions.Value;
 import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
 import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
@@ -48,6 +49,7 @@ public class ProfCalculator extends Application implements EventHandler<ActionEv
 		stage.setScene(scene);
 		stage.show();
 		additionButton.setOnAction(this);
+		subButton.setOnAction(this);
 		multiplicationButton.setOnAction(this);
 		updateGUI();
 	}
@@ -60,7 +62,7 @@ public class ProfCalculator extends Application implements EventHandler<ActionEv
 				expression = new Addition(expression, new Value(newValue));
 				Logger.getLogger().log("+ " + newValue);
 			} else if (event.getSource() == subButton) {
-				expression = new Multiplication(expression, new Value(newValue));
+				expression = new Sub(expression, new Value(newValue));
 				Logger.getLogger().log("- " + newValue);
 			} else if (event.getSource() == multiplicationButton) {
 				expression = new Multiplication(expression, new Value(newValue));

@@ -52,4 +52,28 @@ class TNecessaryBracketsWhiteBox {
 		Expression parent = new Sub(brackets, new Value(3));
 		assertEquals(parent.toString(), "1 * 2 - 3");
 	}
+	
+	@Test
+	void testMultiplicationWithinSubtractionNegativeNumber() {
+		Expression child = new Multiplication(new Value(1), new Value(2));
+		Expression brackets = new NecessaryBrackets(child);
+		Expression parent = new Sub(brackets, new Value(-3));
+		assertEquals(parent.toString(), "1 * 2 - (-3)");
+	}
+	
+	@Test
+	void testSubtractionWithinMultiplicationWithNegativeNumber() {
+		Expression child = new Sub(new Value(1), new Value(2));
+		Expression brackets = new NecessaryBrackets(child);
+		Expression parent = new Multiplication(brackets, new Value(-3));
+		assertEquals(parent.toString(), "(1 - 2) * (-3)");
+	}
+	
+	@Test
+	void testMultiplicationWithinAdditionWithNegativeNumber() {
+		Expression child = new Multiplication(new Value(1), new Value(2));
+		Expression brackets = new NecessaryBrackets(child);
+		Expression parent = new Addition(brackets, new Value(-3));
+		assertEquals(parent.toString(), "1 * 2 + (-3)");
+	}
 }

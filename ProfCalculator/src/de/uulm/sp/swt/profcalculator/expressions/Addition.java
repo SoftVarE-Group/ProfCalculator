@@ -11,6 +11,9 @@ public class Addition extends Expression {
 	}
 
 	public String toString(Expression parent) {
+		if (right.evaluate() < 0) {
+			return left.toString(this) + " + (" + right.toString(this) + ")";
+		}
 		return left.toString(this) + " + " + right.toString(this);
 	}
 
