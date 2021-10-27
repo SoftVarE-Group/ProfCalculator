@@ -5,6 +5,7 @@ import de.uulm.sp.swt.profcalculator.expressions.CounterValue;
 import de.uulm.sp.swt.profcalculator.expressions.Expression;
 import de.uulm.sp.swt.profcalculator.expressions.Multiplication;
 import de.uulm.sp.swt.profcalculator.expressions.NecessaryBrackets;
+import de.uulm.sp.swt.profcalculator.expressions.Sub;
 import de.uulm.sp.swt.profcalculator.expressions.Value;
 import de.uulm.sp.swt.profcalculator.gui.BlueFontGUIFactory;
 import de.uulm.sp.swt.profcalculator.gui.GUIFactory;
@@ -20,10 +21,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-public class ProfCalculator	extends Application implements EventHandler<ActionEvent> {
+public class ProfCalculator extends Application implements EventHandler<ActionEvent> {
 
 	private Expression expression = new CounterValue(this);
-	
+
 	private GUIFactory guiFactory = new BlueFontGUIFactory();
 
 	private Label errorLabel = guiFactory.createLabel();
@@ -31,6 +32,7 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 	private TextField inputField = new TextField();
 
 	private Button additionButton = guiFactory.createButton("+");
+	private Button subButton = guiFactory.createButton("-");
 	private Button multiplicationButton = guiFactory.createButton("*");
 
 	private Label resultLabel = guiFactory.createLabel();
@@ -40,13 +42,14 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 		stage.setTitle("Professorial Calculator");
 		errorLabel.setTextFill(Color.web("#AA0000"));
 
-		VBox layout = new VBox(10, errorLabel, inputField, additionButton, multiplicationButton, resultLabel);
+		VBox layout = new VBox(10, errorLabel, inputField, additionButton, subButton, multiplicationButton, resultLabel);
 		layout.setPadding(new Insets(20, 80, 20, 80));
 		Scene scene = new Scene(layout);
 
 		stage.setScene(scene);
 		stage.show();
 		additionButton.setOnAction(this);
+		subButton.setOnAction(this);
 		multiplicationButton.setOnAction(this);
 		updateGUI();
 	}
@@ -58,8 +61,10 @@ public class ProfCalculator	extends Application implements EventHandler<ActionEv
 			if (event.getSource() == additionButton) {
 				expression = new Addition(expression, new Value(newValue));
 				Logger.getLogger().log("+ " + newValue);
-			}
-			else if (event.getSource() == multiplicationButton) {
+			} else if (event.getSource() == subButton) {
+				expression = new Sub(expression, new Value(newValue));
+				Logger.getLogger().log("- " + newValue);
+			} else if (event.getSource() == multiplicationButton) {
 				expression = new Multiplication(expression, new Value(newValue));
 				Logger.getLogger().log("* " + newValue);
 			}
